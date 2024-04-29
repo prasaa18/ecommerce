@@ -9,10 +9,17 @@ import com.prasad.ecommercespringboot.repository.ProductRepository;
 import com.prasad.ecommercespringboot.service.ProductService;
 import com.prasad.ecommercespringboot.service.UserService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -86,17 +93,30 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public String deleteProduct(Long productId) throws ProductException {
-        return null;
+        Product product = findProductById(productId);
+        product.getSizes().clear();
+        productRepository.delete(product);
+        return  "Product deleted successfully";
+
     }
 
     @Override
-    public Product updateProduct(Long productId, Product product) throws ProductException {
-        return null;
+    public Product updateProduct(Long productId, Product req) throws ProductException {
+        Product product = findProductById(productId);
+        if(req.getQuantity()!=0){
+            product.setQuantity(req.getQuantity());
+        }
+        return  productRepository.save(product);
     }
 
     @Override
     public Product findProductById(long id) throws ProductException {
-        return null;
+        Optional<Product> product=productRepository.findById(id);
+        if(product.isPresent()){
+            return  product.get();
+        }
+        throw  new ProductException("Product not found with id -"+id);
+
     }
 
     @Override
@@ -105,7 +125,35 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> getAllProduct(String category, List<String> color, List<String> sizes, Integer minPrice, Integer maxPrice, Integer minDiscount, String sort, String stock, Integer pageNumber, Integer PageSize) {
-        return null;
+    public Page<Product> getAllProduct(String category, List<String> color, List<String> sizes,
+                                       Integer minPrice, Integer maxPrice, Integer minDiscount, String sort, String stock,
+                                       Integer pageNumber, Integer pageSize) {
+
+        Pageable pagebble = PageRequest.of(pageNumber,pageSize);
+
+        List<Product> products = productRepository.filterProducts(category,minPrice,maxPrice,minDiscount,sort);
+
+        if(!color.isEmpty()){
+            products = products.stream().filter(p-> color.stream().anyMatch(c->c.equalsIgnoreCase(p.getColor())))
+                    .collect(Collectors.toList());
+        }
+
+        if(stock !=null){
+            if(stock.equals("in_stock")){
+                products =products.stream().filter(p->p.getQuantity()>0).collect(Collectors.toList());
+            }
+            else if (stock.equals("out_of_stock")){
+                products =products.stream().filter((p->p.getQuantity()<1)).collect(Collectors.toList());
+            }
+        }
+
+        int startIndex =(int) pagebble.getOffset();                                        //for page1//1 10
+        int  endIndex= Math.min(startIndex+pagebble.getPageSize(), products.size());  // for page 2 - 11 --21   // 10 +11 =21 or 5
+
+        List<Product> pageContent = products.subList(startIndex,endIndex);
+
+        Page<Product> filteredProducts =new PageImpl<>(pageContent,pagebble,products.size());
+
+        return  filteredProducts;
     }
 }
