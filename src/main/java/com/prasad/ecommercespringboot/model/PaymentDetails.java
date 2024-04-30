@@ -71,7 +71,6 @@ public class PaymentDetails {
         this.razorpayPaymentId = razorpayPaymentId;
     }
 
-    3.57
 
 
 }

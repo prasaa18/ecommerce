@@ -160,4 +160,24 @@ public class Order {
  public void setCreateAt(LocalDateTime createAt) {
   this.createAt = createAt;
  }
+
+ public Order(Long id, String orderId, User user, List<OrderItem> orderItems,
+              LocalDateTime orderDate, LocalDateTime deliveryDate,
+              Address shippingAddress, PaymentDetails paymentDetails, double totalPrice, Integer totalDiscountedPrice,
+              Integer discounte, String orderStatus, int totalItem, LocalDateTime createAt) {
+  this.id = id;
+  this.orderId = orderId;
+  this.user = user;
+  this.orderItems = orderItems;
+  this.orderDate = orderDate;
+  this.deliveryDate = deliveryDate;
+  this.shippingAddress = shippingAddress;
+  this.paymentDetails = paymentDetails;
+  this.totalPrice = totalPrice;
+  this.totalDiscountedPrice = totalDiscountedPrice;
+  this.discounte = discounte;
+  this.orderStatus = orderStatus;
+  this.totalItem = totalItem;
+  this.createAt = createAt;
+ }
 }
