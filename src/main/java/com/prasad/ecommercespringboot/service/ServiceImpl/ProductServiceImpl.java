@@ -121,7 +121,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> findProductByCategory(String category) {
-        return null;
+
+        System.out.println("category --- "+category);
+
+        List<Product> products = productRepository.findByCategory(category);
+
+        return products;
+    }
+    @Override
+    public List<Product> recentlyAddedProduct() {
+
+        return productRepository.findTop10ByOrderByCreatedAtDesc();
     }
 
     @Override
@@ -155,5 +165,12 @@ public class ProductServiceImpl implements ProductService {
         Page<Product> filteredProducts =new PageImpl<>(pageContent,pagebble,products.size());
 
         return  filteredProducts;
+    }
+
+
+    @Override
+    public List<Product> searchProduct(String query) {
+        List<Product> products=productRepository.searchProduct(query);
+        return products;
     }
 }

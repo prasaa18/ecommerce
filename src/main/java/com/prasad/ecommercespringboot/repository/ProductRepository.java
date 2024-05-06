@@ -9,6 +9,10 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product ,Long> {
 
+
+    @Query("SELECT p From Product p Where LOWER(p.category.name)=:category")
+    public List<Product> findByCategory(@Param("category") String category);
+
     @Query("SELECT p FROM Product p " +
             " WHERE (p.category.name = :category OR :category = '') " +
             " AND ((:minPrice IS NULL AND :maxPrice IS NULL) OR (p.discountedPrice BETWEEN :minPrice AND :maxPrice)) " +
@@ -23,5 +27,10 @@ public interface ProductRepository extends JpaRepository<Product ,Long> {
                                         @Param("minDiscount")Integer minDiscount,
                                         @Param("sort") String sort);
 
+    @Query("SELECT p From Product p where LOWER(p.title) Like %:query% OR LOWER(p.description) Like %:query% OR LOWER(p.brand) LIKE %:query% OR LOWER(p.category.name) LIKE %:query%")
+    public List<Product> searchProduct(@Param("query")String query);
 
+
+
+    public List<Product> findTop10ByOrderByCreatedAtDesc();
 }
