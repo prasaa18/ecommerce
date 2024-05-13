@@ -45,6 +45,26 @@ public class CreateProductRequest {
         return price;
     }
 
+
+    public CreateProductRequest(String title, String description, int price, int discountedPersent,
+                                int quantity, int discountPrice, String color, String brand,
+                                Set<Size> size, String imageUrl, String topLevelCategory,
+                                String secondLevelCategory, String thirdLevelCategory) {
+        this.title = title;
+        this.description = description;
+        this.price = price;
+        this.discountedPersent = discountedPersent;
+        this.quantity = quantity;
+        this.discountPrice = discountPrice;
+        this.color = color;
+        this.brand = brand;
+        this.size = size;
+        this.imageUrl = imageUrl;
+        this.topLevelCategory = topLevelCategory;
+        SecondLevelCategory = secondLevelCategory;
+        this.thirdLevelCategory = thirdLevelCategory;
+    }
+
     public void setPrice(int price) {
         this.price = price;
     }

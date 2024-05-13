@@ -101,6 +101,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product>findAllProduct(){
+        return  productRepository.findAll();
+    }
+    @Override
     public Product updateProduct(Long productId, Product req) throws ProductException {
         Product product = findProductById(productId);
         if(req.getQuantity()!=0){

@@ -26,4 +26,6 @@ public interface ProductService{
     public List<Product> recentlyAddedProduct();
 
     public List<Product> searchProduct(String query);
+
+    public List<Product>findAllProduct();
 }

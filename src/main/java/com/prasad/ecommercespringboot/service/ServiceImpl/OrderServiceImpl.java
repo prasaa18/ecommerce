@@ -153,7 +153,7 @@ public class OrderServiceImpl implements OrderServices {
     @Override
     public List<Order> getAllOrders() {
 
-        return orderRepository.findAllByOrderByCreatedAtDesc();
+        return orderRepository.findAllByOrderByCreateAtDesc();
     }
 
     @Override

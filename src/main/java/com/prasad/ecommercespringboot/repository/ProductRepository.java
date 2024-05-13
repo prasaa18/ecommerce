@@ -1,5 +1,6 @@
 package com.prasad.ecommercespringboot.repository;
 
+import com.prasad.ecommercespringboot.model.Order;
 import com.prasad.ecommercespringboot.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -33,4 +34,6 @@ public interface ProductRepository extends JpaRepository<Product ,Long> {
 
 
     public List<Product> findTop10ByOrderByCreatedAtDesc();
+
+    List<Product> findAll();
 }
